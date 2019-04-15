@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Список вещей в гараже</string>
+    <string-array name="garage_items">
+        <item>Деталь от танка//маленькая, в масле, воняет//tech</item>
+        <item>Банка огурцов//внтури плесень, на закуску сойдет//eat</item>
+        <item>Велосипед//старый салют, шины спущены, не на ходу//tech</item>
+        <item>Дверца шкафа//самого шкафа давно нет//trash</item>
+        <item>Яйцеклад алиена//хозяин обещал вернуться//wtf</item>
+    </string-array>
+</resources>
