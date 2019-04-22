@@ -11,12 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SampleAdapter extends BaseAdapter {
     Context ctx;
     LayoutInflater lInflater;
     private List<Sample> samples;
+    final String STRING_ARRAY = "SAMPLES";
+    Storage storage = new Storage();
 
     public SampleAdapter(Context ctx, List<Sample> samples) {
         this.samples = samples;
@@ -63,7 +66,27 @@ public class SampleAdapter extends BaseAdapter {
         Button btnDelete = (Button) view.findViewById(R.id.btn_delete);
 
         btnDelete.setOnClickListener((v)-> {
+            Sample deleteSample = this.samples.get((int) v.getTag());
+            String sampleString = storage.readFile(storage.getPrivateDocStorageDir(ctx, STRING_ARRAY));
+            String[] sampleArr = sampleString.split(";");
+            StringBuilder text = new StringBuilder();
+            for (int i = 0; i < sampleArr.length; i++) {
+                String[] strArr = sampleArr[i].split("//");
+                if(!strArr[0].equals(deleteSample.getName()) && !strArr[1].equals(deleteSample.getTarget()) && !strArr[2].equals(deleteSample.getType()) ) {
+                    text.append(sampleArr[i]);
+                    if(i+1 != sampleArr.length) {
+                        text.append(";");
+                    }
+
+                }
+
+            }
+
+            storage.writeFile(storage.getPrivateDocStorageDir(ctx, STRING_ARRAY), text.toString());
+
+
             this.samples.remove((int) v.getTag());
+
             notifyDataSetChanged();
         });
 
