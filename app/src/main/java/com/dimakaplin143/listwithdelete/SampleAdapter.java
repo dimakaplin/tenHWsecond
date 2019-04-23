@@ -67,6 +67,7 @@ public class SampleAdapter extends BaseAdapter {
         ((ImageView) view.findViewById(R.id.icon_elem)).setImageResource(s.getImgId());
 
         Button btnDelete = (Button) view.findViewById(R.id.btn_delete);
+        Button btnAdd = (Button) view.findViewById(R.id.btn_add);
 
         btnDelete.setOnClickListener((v) -> {
             Sample deleteSample = this.samples.get((int) v.getTag());
@@ -93,6 +94,19 @@ public class SampleAdapter extends BaseAdapter {
 
 
             this.samples.remove((int) v.getTag());
+
+            notifyDataSetChanged();
+        });
+
+        btnAdd.setOnClickListener((v) -> {
+            Sample newSample = new Sample("Что-то пустое", "Пустота в каждой детале", "wtf");
+            samples.add(newSample);
+
+            String newSampleString = ";" + newSample.getName() + "//" + newSample.getTarget() + "//" + newSample.getType();
+            String sampleString = storage.readFile(storage.getPrivateDocStorageDir(ctx, STRING_ARRAY));
+            sampleString = sampleString + newSampleString;
+
+            storage.writeFile(storage.getPrivateDocStorageDir(ctx, STRING_ARRAY), sampleString);
 
             notifyDataSetChanged();
         });
