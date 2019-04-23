@@ -18,19 +18,21 @@ public class Storage {
     public File getPrivateDocStorageDir(Context context, String fileName) {
 
         File file = new File(context.getExternalFilesDir(
-                null), fileName);
-        if (!file.mkdirs()) {
+                Environment.DIRECTORY_DOCUMENTS), fileName);
+        if (!context.getExternalFilesDir(
+                Environment.DIRECTORY_DOCUMENTS).mkdirs()) {
             Log.e(LOG_TAG, "Directory not created");
         }
         return file;
     }
 
-    public void writeFile(File file, String fileText) {
+    public void writeFile(File file, String fileText)  {
+
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
             bw.write(fileText);
             bw.close();
-            Log.d(LOG_TAG, "Файл записан");
+            Log.d(LOG_TAG, "Файл записан " + fileText);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,6 +40,7 @@ public class Storage {
     }
 
     public String readFile(File file) {
+
         StringBuilder text = new StringBuilder();
 
         try {
@@ -46,11 +49,14 @@ public class Storage {
             text.append("");
             while ((line = br.readLine()) != null) {
                 text.append(line);
+
             }
         }
         catch (IOException e) {
             Log.e(LOG_TAG, "READ " + e.getMessage());
         }
+        Log.e(LOG_TAG, "READED " + text.toString());
         return text.toString();
     }
+
 }

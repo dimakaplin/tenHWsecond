@@ -1,6 +1,7 @@
 package com.dimakaplin143.listwithdelete;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SampleAdapter extends BaseAdapter {
+    final String LOG_TAG = "myLogs";
+    final String STRING_ARRAY = "samples.txt";
     Context ctx;
     LayoutInflater lInflater;
-    private List<Sample> samples;
-    final String STRING_ARRAY = "SAMPLES";
     Storage storage = new Storage();
+    private List<Sample> samples;
+
 
     public SampleAdapter(Context ctx, List<Sample> samples) {
         this.samples = samples;
@@ -65,16 +68,20 @@ public class SampleAdapter extends BaseAdapter {
 
         Button btnDelete = (Button) view.findViewById(R.id.btn_delete);
 
-        btnDelete.setOnClickListener((v)-> {
+        btnDelete.setOnClickListener((v) -> {
             Sample deleteSample = this.samples.get((int) v.getTag());
             String sampleString = storage.readFile(storage.getPrivateDocStorageDir(ctx, STRING_ARRAY));
             String[] sampleArr = sampleString.split(";");
             StringBuilder text = new StringBuilder();
             for (int i = 0; i < sampleArr.length; i++) {
                 String[] strArr = sampleArr[i].split("//");
-                if(!strArr[0].equals(deleteSample.getName()) && !strArr[1].equals(deleteSample.getTarget()) && !strArr[2].equals(deleteSample.getType()) ) {
+                if (strArr.length < 3) {
+                    break;
+                }
+
+                if (!strArr[0].equals(deleteSample.getName()) && !strArr[1].equals(deleteSample.getTarget()) && !strArr[2].equals(deleteSample.getType())) {
                     text.append(sampleArr[i]);
-                    if(i+1 != sampleArr.length) {
+                    if (i + 1 != sampleArr.length) {
                         text.append(";");
                     }
 
@@ -90,7 +97,7 @@ public class SampleAdapter extends BaseAdapter {
             notifyDataSetChanged();
         });
 
-        view.setOnLongClickListener(v-> {
+        view.setOnLongClickListener(v -> {
             Toast.makeText(ctx, s.getName(), Toast.LENGTH_SHORT).show();
             return true;
         });
